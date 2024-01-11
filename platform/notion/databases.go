@@ -7,11 +7,11 @@ import (
 )
 
 func (r *NotionService) RetrieveDatabase() {
-	appConfig := config.AppConfig()
+	notionConfig := config.NotionConfig()
 
 	client := NotionHTTPClient()
 
-	resp, err := client.Get("/databases/" + appConfig.NotionDatabaseID)
+	resp, err := client.Get("/databases/" + notionConfig.NotionDatabaseID)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
@@ -22,11 +22,11 @@ func (r *NotionService) RetrieveDatabase() {
 }
 
 func (r *NotionService) QueryDatabase() {
-	appConfig := config.AppConfig()
+	notionConfig := config.NotionConfig()
 
 	client := NotionHTTPClient()
 
-	resp, err := client.Post("/databases/"+appConfig.NotionDatabaseID+"/query", "application/json", []byte(`{}`))
+	resp, err := client.Post("/databases/"+notionConfig.NotionDatabaseID+"/query", "application/json", []byte(`{}`))
 	if err != nil {
 		fmt.Println("Error:", err)
 		return

@@ -13,4 +13,6 @@ func LoadAllConfigs(envFile string) {
 	}
 
 	LoadAppConfig()
+	LoadNocoDBConfig()
+	LoadNotionConfig()
 }

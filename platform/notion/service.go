@@ -12,7 +12,7 @@ func NewNotionService() *NotionService {
 }
 
 func NotionHTTPClient() *http.CustomHTTPClient {
-	appConfig := config.AppConfig()
+	notionConfig := config.NotionConfig()
 
 	client := http.NewCustomHTTPClient()
 	client.SetBaseURL("https://api.notion.com/v1")
@@ -20,7 +20,7 @@ func NotionHTTPClient() *http.CustomHTTPClient {
 		"Content-Type":   "application/json",
 		"Notion-Version": "2022-06-28",
 	})
-	client.SetBearerAuthorization(appConfig.NotionAPIKey)
+	client.SetBearerAuthorization(notionConfig.NotionAPIKey)
 
 	return client
 }
