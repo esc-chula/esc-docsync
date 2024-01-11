@@ -12,6 +12,7 @@ type App struct {
 	Debug          bool
 	ReadTimeout    time.Duration
 	RequestTimeout time.Duration
+	AllowedOrigin  string
 }
 
 var app = &App{}
@@ -28,4 +29,5 @@ func LoadAppConfig() {
 	app.ReadTimeout = time.Duration(timeOut) * time.Second
 	timeOut, _ = strconv.Atoi(os.Getenv("APP_REQUEST_TIMEOUT"))
 	app.RequestTimeout = time.Duration(timeOut) * time.Second
+	app.AllowedOrigin = os.Getenv("APP_ALLOWED_ORIGIN")
 }

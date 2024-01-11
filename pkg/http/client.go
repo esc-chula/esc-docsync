@@ -3,6 +3,8 @@ package http
 import (
 	"net/http"
 	"time"
+
+	"github.com/esc-chula/esc-docsync/pkg/config"
 )
 
 type CustomHTTPClient struct {
@@ -11,6 +13,8 @@ type CustomHTTPClient struct {
 }
 
 func NewCustomHTTPClient() *CustomHTTPClient {
+	appConfig := config.AppConfig()
+
 	transport := &defaultTransport{
 		Transport: http.DefaultTransport,
 	}
@@ -18,7 +22,7 @@ func NewCustomHTTPClient() *CustomHTTPClient {
 	return &CustomHTTPClient{
 		Client: &http.Client{
 			Transport: transport,
-			Timeout:   time.Second * 20,
+			Timeout:   time.Second * time.Duration(appConfig.RequestTimeout),
 		},
 		BaseURL: "",
 	}

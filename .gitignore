@@ -11,6 +11,7 @@ vendor
 
 # Misc
 .env
+data_map.json
 build/
 tmp/
 
