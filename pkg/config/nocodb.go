@@ -5,6 +5,7 @@ import (
 )
 
 type NocoDB struct {
+	NocoDBURL      string
 	NocoDBAPIToken string
 }
 
@@ -15,5 +16,6 @@ func NocoDBConfig() *NocoDB {
 }
 
 func LoadNocoDBConfig() {
+	nocodb.NocoDBURL = os.Getenv("NOCODB_URL")
 	nocodb.NocoDBAPIToken = os.Getenv("NOCODB_API_TOKEN")
 }

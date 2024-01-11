@@ -5,9 +5,9 @@ import (
 )
 
 type Notion struct {
+	NotionURL        string
 	NotionAPIKey     string
 	NotionDatabaseID string
-	NocoDBAPIToken   string
 }
 
 var notion = &Notion{}
@@ -17,6 +17,7 @@ func NotionConfig() *Notion {
 }
 
 func LoadNotionConfig() {
+	notion.NotionURL = os.Getenv("NOTION_URL")
 	notion.NotionAPIKey = os.Getenv("NOTION_API_KEY")
 	notion.NotionDatabaseID = os.Getenv("NOTION_DATABASE_ID")
 }
