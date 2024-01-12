@@ -12,7 +12,9 @@ func Serve() {
 
 	middleware.FiberMiddleware(app)
 
+	route.GeneralRoute(app)
 	route.WebhookRoutes(app)
+	route.NotFoundRoute(app)
 
 	SeverHandler(app)
 }
