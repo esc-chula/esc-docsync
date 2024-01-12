@@ -1,4 +1,4 @@
-package model
+package template
 
 type ResPageBody struct {
 	Object         string `json:"object"`
