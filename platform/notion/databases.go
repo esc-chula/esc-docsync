@@ -2,16 +2,12 @@ package notion
 
 import (
 	"fmt"
-
-	"github.com/esc-chula/esc-docsync/pkg/config"
 )
 
-func (r *NotionService) RetrieveDatabase() {
-	notionConfig := config.NotionConfig()
-
+func (r *NotionService) RetrieveDatabase(databaseId string) {
 	client := NotionHTTPClient()
 
-	resp, err := client.Get("/databases/" + notionConfig.NotionDatabaseID)
+	resp, err := client.Get("/databases/" + databaseId)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
@@ -21,12 +17,11 @@ func (r *NotionService) RetrieveDatabase() {
 	fmt.Println("Status Code:", resp.Status)
 }
 
-func (r *NotionService) QueryDatabase() {
-	notionConfig := config.NotionConfig()
+func (r *NotionService) QueryDatabase(databaseId string) {
 
 	client := NotionHTTPClient()
 
-	resp, err := client.Post("/databases/"+notionConfig.NotionDatabaseID+"/query", "application/json", []byte(`{}`))
+	resp, err := client.Post("/databases/"+databaseId+"/query", "application/json", []byte(`{}`))
 	if err != nil {
 		fmt.Println("Error:", err)
 		return

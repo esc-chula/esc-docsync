@@ -1,6 +1,6 @@
-package notion
+package model
 
-type PageBody struct {
+type ReqPageBody struct {
 	Parent struct {
 		DatabaseId string `json:"database_id"`
 	} `json:"parent"`

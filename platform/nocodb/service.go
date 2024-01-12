@@ -19,6 +19,7 @@ func NocoDBHTTPClient() *http.CustomHTTPClient {
 	client.SetBaseURL("http://localhost:8080/api/v2")
 	client.SetDefaultHeaders(map[string]string{
 		"Content-Type": "application/json",
+		"xc-token":     nocodbConfig.NocoDBAPIToken,
 	})
 	client.SetBearerAuthorization(nocodbConfig.NocoDBAPIToken)
 

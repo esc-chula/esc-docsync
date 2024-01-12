@@ -14,7 +14,7 @@ type DataMapModel struct {
 	NotionDatabaseId string `json:"notion_database_id"`
 }
 
-func GetDataMap() []DataMapModel {
+func ReadDataMap() []byte {
 	log := logger.GetLogger()
 
 	jsonFile, err := os.Open("config/data_map.json")
@@ -26,6 +26,12 @@ func GetDataMap() []DataMapModel {
 	defer jsonFile.Close()
 
 	byteValue, _ := io.ReadAll(jsonFile)
+
+	return byteValue
+}
+
+func GetDataMap() []DataMapModel {
+	byteValue := ReadDataMap()
 
 	var dataMap []DataMapModel
 
