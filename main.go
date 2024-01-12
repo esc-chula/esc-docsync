@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/esc-chula/esc-docsync/cmd/local"
+	"github.com/esc-chula/esc-docsync/cmd/data"
 	"github.com/esc-chula/esc-docsync/cmd/webhook"
 	"github.com/esc-chula/esc-docsync/pkg/config"
 )
@@ -9,7 +9,7 @@ import (
 func main() {
 	config.LoadAllConfigs("config/.env")
 
-	local.LoadJsonConfigs()
+	data.LoadJsonConfigs()
 
 	webhook.Serve()
 }

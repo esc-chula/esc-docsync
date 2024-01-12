@@ -1,4 +1,4 @@
-package local
+package data
 
 import (
 	"github.com/esc-chula/esc-docsync/pkg/data"
