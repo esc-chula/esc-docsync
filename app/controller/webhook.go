@@ -13,6 +13,8 @@ import (
 func InsertHandler(c *fiber.Ctx) error {
 	log := logger.GetLogger()
 
+	log.Info("Insert webhook received")
+
 	var body model.InsertBody
 	if err := c.BodyParser(&body); err != nil {
 		log.Error(err)
@@ -32,7 +34,7 @@ func InsertHandler(c *fiber.Ctx) error {
 		}
 
 		pageData, err := notionService.CreatePage(
-			template.ReqPageBody(databaseId, fiber.Map{
+			template.CreatePageBody(databaseId, fiber.Map{
 				"Title":       template.TitleProperty(row.Title),
 				"Description": template.RichTextProperty(row.Description),
 			}),
@@ -67,4 +69,18 @@ func InsertHandler(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"message": "Webhook received",
 	})
+}
+
+func UpdateHandler(c *fiber.Ctx) error {
+	log := logger.GetLogger()
+
+	log.Info("Update webhook received")
+
+	var body model.UpdateBody
+	if err := c.BodyParser(&body); err != nil {
+		log.Error(err)
+		return err
+	}
+
+	return nil
 }

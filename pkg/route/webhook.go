@@ -9,4 +9,5 @@ func WebhookRoutes(app *fiber.App) {
 	webhookRoutes := app.Group("/webhook")
 
 	webhookRoutes.Post("/insert", controller.InsertHandler)
+	webhookRoutes.Post("/update", controller.UpdateHandler)
 }

@@ -10,7 +10,6 @@ func GeneralRoute(app *fiber.App) {
 			"message": "ESC DocSync webhook server is running",
 		})
 	})
-
 }
 
 func NotFoundRoute(app *fiber.App) {

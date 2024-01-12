@@ -3,27 +3,27 @@ package notion
 import (
 	"encoding/json"
 
-	"github.com/esc-chula/esc-docsync/platform/notion/template"
+	"github.com/esc-chula/esc-docsync/platform/notion/model"
 	"github.com/gofiber/fiber/v2"
 )
 
-func (r *NotionService) CreatePage(data fiber.Map) (template.ResPageBody, error) {
+func (r *NotionService) CreatePage(data fiber.Map) (model.ResPageBody, error) {
 	client := NotionHTTPClient()
 
 	body, err := json.Marshal(data)
 	if err != nil {
-		return template.ResPageBody{}, err
+		return model.ResPageBody{}, err
 	}
 
 	resp, err := client.Post("/pages", "application/json", body)
 	if err != nil {
-		return template.ResPageBody{}, err
+		return model.ResPageBody{}, err
 	}
 	defer resp.Body.Close()
 
-	var res template.ResPageBody
+	var res model.ResPageBody
 	if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
-		return template.ResPageBody{}, err
+		return model.ResPageBody{}, err
 	}
 
 	return res, nil

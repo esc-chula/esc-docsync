@@ -6,7 +6,16 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func (r *NocoDBService) GetRows() {
+func (r *NocoDBService) GetRows(tableId string) error {
+	client := NocoDBHTTPClient()
+
+	resp, err := client.Get("/tables/" + tableId + "/records")
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	return nil
 }
 
 func (r *NocoDBService) GetRow() {

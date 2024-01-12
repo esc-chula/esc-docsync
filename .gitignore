@@ -12,6 +12,7 @@ vendor
 # Misc
 .env
 data_map.json
+schema.go
 build/
 tmp/
 

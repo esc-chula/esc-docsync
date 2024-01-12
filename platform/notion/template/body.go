@@ -2,7 +2,7 @@ package template
 
 import "github.com/gofiber/fiber/v2"
 
-func ReqPageBody(databaseId string, properties fiber.Map) fiber.Map {
+func CreatePageBody(databaseId string, properties fiber.Map) fiber.Map {
 	return fiber.Map{
 		"parent": fiber.Map{
 			"database_id": databaseId,

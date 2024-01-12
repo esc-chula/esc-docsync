@@ -9,5 +9,5 @@ func LoadJsonConfigs() {
 	log := logger.GetLogger()
 
 	data.ReadDataMap()
-	log.Info("Successfully read config/data_map.json")
+	log.Info("Successfully read config/data/data_map.json")
 }
