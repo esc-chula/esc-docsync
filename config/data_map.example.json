@@ -1,8 +1,14 @@
 [
   {
     "table_name": "",
-    "noco_id": "",
-    "notion_id": "",
-    "schema": {}
+    "nocodb_table_id": "",
+    "notion_database_id": "",
+    "schema": [
+      {
+        "name": "",
+        "nocodb_type": "",
+        "notion_type": ""
+      }
+    ]
   }
 ]
