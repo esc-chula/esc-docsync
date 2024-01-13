@@ -8,6 +8,7 @@ import (
 
 func FiberConfig() fiber.Config {
 	return fiber.Config{
-		ReadTimeout: time.Second * time.Duration(AppConfig().ReadTimeout),
+		DisableStartupMessage: true,
+		ReadTimeout:           time.Second * time.Duration(AppConfig().ReadTimeout),
 	}
 }

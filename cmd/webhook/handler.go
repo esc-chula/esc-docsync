@@ -15,6 +15,8 @@ func SeverHandler(app *fiber.App) {
 	appConfig := config.AppConfig()
 	log := logger.GetLogger()
 
+	log.Infof("Webhook server is running on http://%s:%d", appConfig.Host, appConfig.Port)
+
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, syscall.SIGTERM, syscall.SIGINT, syscall.SIGQUIT)
 
