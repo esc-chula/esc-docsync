@@ -2,6 +2,7 @@
   {
     "table_name": "",
     "noco_id": "",
-    "notion_id": ""
+    "notion_id": "",
+    "schema": {}
   }
 ]

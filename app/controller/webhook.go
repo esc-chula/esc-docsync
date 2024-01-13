@@ -12,6 +12,8 @@ import (
 
 func InsertHandler(c *fiber.Ctx) error {
 	log := logger.GetLogger()
+	notionService := notion.NewNotionService()
+	nocodbService := nocodb.NewNocoDBService()
 
 	log.Info("Insert webhook received")
 
@@ -21,23 +23,49 @@ func InsertHandler(c *fiber.Ctx) error {
 		return err
 	}
 
-	notionService := notion.NewNotionService()
+	tableName := body.Data.TableName
+	if tableName == "" {
+		err := "Table name not found"
+		log.Error(err)
+		return c.Status(400).JSON(fiber.Map{
+			"message": err,
+		})
+	}
 
-	for _, row := range body.Data.Rows {
-		databaseId := data.GetNotionDatabaseId(body.Data.TableName)
+	rows := body.Data.Rows
+	if len(rows) == 0 {
+		err := "No rows found"
+		log.Error(err)
+		return c.Status(400).JSON(fiber.Map{
+			"message": err,
+		})
+	}
+
+	for _, row := range rows {
+		rowData := row.(map[string]interface{})
+
+		schema := data.GetSchema(tableName)
+
+		properties := make(fiber.Map)
+		for _, schema := range schema {
+			if schema.NotionType == "" {
+				continue
+			}
+			properties[schema.Name] = template.NotionTypeProperty(schema.NotionType, rowData[schema.Name].(string))
+		}
+
+		databaseId := data.GetNotionDatabaseId(tableName)
 
 		if databaseId == "" {
-			log.Error("Database ID not found for table: ", body.Data.TableName)
-			return c.JSON(fiber.Map{
-				"message": "Database ID not found for table: " + body.Data.TableName,
+			err := "Notion Database ID not found for table: " + tableName
+			log.Error(err)
+			return c.Status(500).JSON(fiber.Map{
+				"message": err,
 			})
 		}
 
 		pageData, err := notionService.CreatePage(
-			template.CreatePageBody(databaseId, fiber.Map{
-				"Title":       template.TitleProperty(row.Title),
-				"Description": template.RichTextProperty(row.Description),
-			}),
+			template.CreatePageBody(databaseId, properties),
 		)
 		if err != nil {
 			log.Error(err)
@@ -46,24 +74,24 @@ func InsertHandler(c *fiber.Ctx) error {
 
 		log.Info("Successfully created Notion page: ", pageData.Id)
 
-		nocodbService := nocodb.NewNocoDBService()
-		tableId := data.GetNocoDBTableId(body.Data.TableName)
+		tableId := data.GetNocoDBTableId(tableName)
 		if tableId == "" {
-			log.Error("Table ID not found for table: ", body.Data.TableName)
-			return c.JSON(fiber.Map{
-				"message": "Table ID not found for table: " + body.Data.TableName,
+			err := "NocoDB Table ID not found for table: " + tableName
+			log.Error(err)
+			return c.Status(500).JSON(fiber.Map{
+				"message": err,
 			})
 		}
 
 		if err := nocodbService.UpdateRow(tableId, fiber.Map{
-			"Id":             row.Id,
+			"Id":             rowData["Id"],
 			"Notion Page Id": pageData.Id,
 		}); err != nil {
 			log.Error(err)
 			return err
 		}
 
-		log.Info("Successfully updated NocoDB record: ", row.Id)
+		log.Info("Successfully updated NocoDB record: ", rowData["Id"])
 	}
 
 	return c.JSON(fiber.Map{

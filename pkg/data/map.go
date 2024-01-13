@@ -8,10 +8,17 @@ import (
 	"github.com/esc-chula/esc-docsync/platform/logger"
 )
 
+type Schema struct {
+	Name       string `json:"name"`
+	NocoDBType string `json:"nocodb_type"`
+	NotionType string `json:"notion_type"`
+}
+
 type DataMapModel struct {
-	TableName        string `json:"table_name"`
-	NocoDBTableId    string `json:"nocodb_table_id"`
-	NotionDatabaseId string `json:"notion_database_id"`
+	TableName        string   `json:"table_name"`
+	NocoDBTableId    string   `json:"nocodb_table_id"`
+	NotionDatabaseId string   `json:"notion_database_id"`
+	Schema           []Schema `json:"schema"`
 }
 
 func ReadDataMap() []byte {
@@ -62,4 +69,16 @@ func GetNotionDatabaseId(tableName string) string {
 	}
 
 	return ""
+}
+
+func GetSchema(tableName string) []Schema {
+	dataMap := GetDataMap()
+
+	for _, data := range dataMap {
+		if data.TableName == tableName {
+			return data.Schema
+		}
+	}
+
+	return nil
 }

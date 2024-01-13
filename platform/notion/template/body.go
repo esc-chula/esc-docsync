@@ -11,6 +11,16 @@ func CreatePageBody(databaseId string, properties fiber.Map) fiber.Map {
 	}
 }
 
+func NotionTypeProperty(propertyType string, value string) fiber.Map {
+	switch propertyType {
+	case "title":
+		return TitleProperty(value)
+	case "rich_text":
+		return RichTextProperty(value)
+	}
+	return RichTextProperty(value)
+}
+
 func TitleProperty(title string) fiber.Map {
 	return fiber.Map{
 		"title": []fiber.Map{
