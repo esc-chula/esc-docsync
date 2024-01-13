@@ -14,7 +14,7 @@ func FiberMiddleware(app *fiber.App) {
 
 	app.Use(
 		cors.New(cors.Config{
-			AllowOrigins: appConfig.AllowedOrigin,
+			AllowOrigins: appConfig.AllowedOrigins,
 			AllowMethods: "POST",
 		}),
 
