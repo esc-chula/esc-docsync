@@ -53,7 +53,9 @@ func InsertHandler(c *fiber.Ctx) error {
 			if schema.NotionType == "" {
 				continue
 			}
-			properties[schema.Name] = template.NotionTypeProperty(schema.NotionType, rowData[schema.Name].(string))
+			properties[schema.Name] = template.NotionTypeProperty(
+				schema.NotionType, rowData[schema.Name].(string),
+			)
 		}
 
 		databaseId := data.GetNotionDatabaseId(tableName)
