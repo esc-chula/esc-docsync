@@ -20,7 +20,9 @@ func InsertHandler(c *fiber.Ctx) error {
 	var body model.InsertBody
 	if err := c.BodyParser(&body); err != nil {
 		log.Error(err)
-		return err
+		return c.Status(400).JSON(fiber.Map{
+			"message": err,
+		})
 	}
 
 	tableName := body.Data.TableName
@@ -69,7 +71,9 @@ func InsertHandler(c *fiber.Ctx) error {
 		)
 		if err != nil {
 			log.Error(err)
-			return err
+			return c.Status(500).JSON(fiber.Map{
+				"message": err,
+			})
 		}
 
 		log.Info("Successfully created Notion page: ", pageData.Id)
@@ -88,7 +92,9 @@ func InsertHandler(c *fiber.Ctx) error {
 			"Notion Page Id": pageData.Id,
 		}); err != nil {
 			log.Error(err)
-			return err
+			return c.Status(500).JSON(fiber.Map{
+				"message": err,
+			})
 		}
 
 		log.Info("Successfully updated NocoDB record: ", rowData["Id"])
