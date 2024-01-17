@@ -10,11 +10,17 @@ vendor
 *.out
 
 # Misc
-.env
-data_map.json
-schema.go
 build/
 tmp/
+
+# Secret
+.env
+data_map.json
+calendar_map.json
+credentials.json
+token.json
+google_secret.json
+google_token.json
 
 # Build file
 bet-intania-backend
