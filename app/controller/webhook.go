@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/esc-chula/esc-docsync/app/model"
-	"github.com/esc-chula/esc-docsync/pkg/data"
+	"github.com/esc-chula/esc-docsync/pkg/config"
 	"github.com/esc-chula/esc-docsync/platform/logger"
 	"github.com/esc-chula/esc-docsync/platform/nocodb"
 	"github.com/esc-chula/esc-docsync/platform/notion"
@@ -46,7 +46,7 @@ func InsertHandler(c *fiber.Ctx) error {
 	for _, row := range rows {
 		rowData := row.(map[string]interface{})
 
-		schema := data.GetSchema(tableName)
+		schema := config.GetSchema(tableName)
 
 		properties := make(fiber.Map)
 		for _, schema := range schema {
@@ -58,7 +58,7 @@ func InsertHandler(c *fiber.Ctx) error {
 			)
 		}
 
-		databaseId := data.GetNotionDatabaseId(tableName)
+		databaseId := config.GetNotionDatabaseId(tableName)
 
 		if databaseId == "" {
 			err := "Notion Database ID not found for table: " + tableName
@@ -80,7 +80,7 @@ func InsertHandler(c *fiber.Ctx) error {
 
 		log.Info("Successfully created Notion page: ", pageData.Id)
 
-		tableId := data.GetNocoDBTableId(tableName)
+		tableId := config.GetNocoDBTableId(tableName)
 		if tableId == "" {
 			err := "NocoDB Table ID not found for table: " + tableName
 			log.Error(err)

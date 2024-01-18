@@ -1,4 +1,4 @@
-package data
+package config
 
 import (
 	"encoding/json"
@@ -21,24 +21,27 @@ type DataMapModel struct {
 	Schema           []Schema `json:"schema"`
 }
 
-func ReadDataMap() []byte {
+func ReadDataMap() ([]byte, error) {
 	log := logger.GetLogger()
 
 	jsonFile, err := os.Open("config/data_map.json")
 	if err != nil {
 		log.Panic(err)
-		panic(err)
+		return nil, err
 	}
 
 	defer jsonFile.Close()
 
 	byteValue, _ := io.ReadAll(jsonFile)
 
-	return byteValue
+	return byteValue, nil
 }
 
 func GetDataMap() []DataMapModel {
-	byteValue := ReadDataMap()
+	byteValue, err := ReadDataMap()
+	if err != nil {
+		return nil
+	}
 
 	var dataMap []DataMapModel
 
