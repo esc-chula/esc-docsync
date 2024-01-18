@@ -30,11 +30,17 @@ func LoadAllConfigs() {
 	}
 	log.Info("Successfully load config/.env")
 
-	_, err = ReadDataMap()
+	_, err = ReadMap("config/data_map.json")
 	if err != nil {
 		log.Fatalf("can't load config/data_map.json. error: %v", err)
 	}
 	log.Info("Successfully load config/data_map.json")
+
+	_, err = ReadMap("config/calendar_map.json")
+	if err != nil {
+		log.Fatalf("can't load config/calendar_map.json. error: %v", err)
+	}
+	log.Info("Successfully load config/calendar_map.json")
 
 	_, err = calendar.ReadSecret()
 	if err != nil {

@@ -46,7 +46,7 @@ func InsertHandler(c *fiber.Ctx) error {
 	for _, row := range rows {
 		rowData := row.(map[string]interface{})
 
-		schema := config.GetSchema(tableName)
+		schema := config.GetDataSchema(tableName)
 
 		properties := make(fiber.Map)
 		for _, schema := range schema {
