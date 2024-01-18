@@ -1,4 +1,4 @@
-package route
+package routes
 
 import (
 	"github.com/esc-chula/esc-docsync/app/controller"

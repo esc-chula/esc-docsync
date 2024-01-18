@@ -1,9 +1,9 @@
 package webhook
 
 import (
+	"github.com/esc-chula/esc-docsync/app/routes"
 	"github.com/esc-chula/esc-docsync/pkg/config"
 	"github.com/esc-chula/esc-docsync/pkg/middleware"
-	"github.com/esc-chula/esc-docsync/pkg/route"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -12,9 +12,9 @@ func Serve() {
 
 	middleware.FiberMiddleware(app)
 
-	route.GeneralRoute(app)
-	route.WebhookRoutes(app)
-	route.NotFoundRoute(app)
+	routes.GeneralRoute(app)
+	routes.WebhookRoutes(app)
+	routes.NotFoundRoute(app)
 
 	SeverHandler(app)
 }
