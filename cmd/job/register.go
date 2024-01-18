@@ -8,7 +8,7 @@ import (
 func RegisterJobs() {
 	c := cron.New()
 
-	c.AddFunc("@every 1m", job.FetchNotionCalendar)
+	c.AddFunc("@every 10s", job.FetchNotionData)
 
 	c.Start()
 }

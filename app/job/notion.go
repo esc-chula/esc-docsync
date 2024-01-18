@@ -2,15 +2,24 @@ package job
 
 import (
 	"github.com/esc-chula/esc-docsync/pkg/config"
+	"github.com/esc-chula/esc-docsync/pkg/lib"
 	"github.com/esc-chula/esc-docsync/platform/logger"
 )
 
 func FetchNotionCalendar() {
-	log := logger.GetLogger()
-
-	calendarMap := config.GetCalendarMap()
-
-	log.Info(calendarMap)
 }
 
-func FetchNotionData() {}
+func FetchNotionData() {
+	log := logger.GetLogger()
+	dataMap := config.GetDataMap()
+
+	for _, data := range dataMap {
+		data, err := lib.FetchNotionDatabase(data.TableName)
+		if err != nil {
+			log.Error(err)
+			continue
+		}
+
+		log.Info(data[0]["Title"])
+	}
+}

@@ -50,7 +50,7 @@ func InsertHandler(c *fiber.Ctx) error {
 
 		properties := make(fiber.Map)
 		for _, schema := range schema {
-			if schema.NotionType == "" {
+			if schema.NotionType == "" || schema.NocoDBType == "" {
 				continue
 			}
 			properties[schema.Name] = template.NotionTypeProperty(
