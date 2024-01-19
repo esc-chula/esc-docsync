@@ -11,6 +11,8 @@ func SyncNotionToNocoDB() {
 	dataMap := config.GetDataMap()
 
 	for _, data := range dataMap {
+		log.Info("Syncing data for table: " + data.TableName)
+
 		notionData, err := lib.FetchNotionDatabaseData(data.TableName)
 		if err != nil {
 			log.Error(err)
@@ -30,27 +32,42 @@ func SyncNotionToNocoDB() {
 			continue
 		}
 
-		isDataValid, err := lib.ValidateDataChanges(nocodbData, notionData)
-		if err != nil {
-			log.Error(err)
-			continue
-		}
-
-		if isDataValid {
-			log.Info("Data already synced")
+		if isDataValid := lib.ValidateDataChanges(nocodbData, notionData); isDataValid {
+			log.Info("Data is valid")
 			continue
 		}
 
 		if len(nocodbData) != len(notionData) {
 			log.Info("Data length is not equal")
 			continue
-		}
+		} else {
+			unsyncedNotionPageIds := lib.FindUnsyncedNocoDBNotionPageIds(nocodbData, notionData)
 
-		// err = lib.SyncData(notionData, data.TableName)
-		// if err != nil {
-		// 	log.Error(err)
-		// 	continue
-		// }
+			updatingData := make([]map[string]interface{}, 0)
+
+			for _, notionRow := range notionData {
+				for _, unsyncedNotionPageId := range unsyncedNotionPageIds {
+					var nocodbRowId float64
+
+					for _, row := range nocodbData {
+						if row["Notion Page Id"] == unsyncedNotionPageId {
+							nocodbRowId = row["Id"].(float64)
+						}
+					}
+
+					if notionRow["Notion Page Id"] == unsyncedNotionPageId {
+						delete(notionRow, "Notion Page Id")
+						notionRow["Id"] = nocodbRowId
+						updatingData = append(updatingData, notionRow)
+					}
+				}
+			}
+
+			if err := lib.UpdateNocoDBRows(updatingData, data.TableName); err != nil {
+				log.Error(err)
+				continue
+			}
+		}
 
 		log.Info("Data successfully synced")
 	}

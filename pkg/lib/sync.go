@@ -10,17 +10,16 @@ func ValidateCacheChanges(data []map[string]interface{}, key string) bool {
 	return false
 }
 
-func ValidateDataChanges(dataA, dataB []map[string]interface{}) (bool, error) {
+func ValidateDataChanges(dataA, dataB []map[string]interface{}) bool {
 	sortedDataA := util.SortMapInterface(dataA, "Title")
 	sortedDataB := util.SortMapInterface(dataB, "Title")
 
 	zippedData, err := util.ZipMapInterface(sortedDataA, sortedDataB)
 	if err != nil {
-		return false, nil
+		return false
 	}
 
 	var equal bool
-	var unequalCount int
 
 	for _, data := range zippedData {
 		dataAKeys := util.Keys(data.A)
@@ -33,14 +32,36 @@ func ValidateDataChanges(dataA, dataB []map[string]interface{}) (bool, error) {
 				equal = true
 			} else {
 				equal = false
-				unequalCount++
 			}
 		}
 	}
 
-	if equal {
-		return true, nil
+	return equal
+}
+
+func FindUnsyncedNocoDBNotionPageIds(dataA, dataB []map[string]interface{}) []string {
+	sortedDataA := util.SortMapInterface(dataA, "Title")
+	sortedDataB := util.SortMapInterface(dataB, "Title")
+
+	zippedData, err := util.ZipMapInterface(sortedDataA, sortedDataB)
+	if err != nil {
+		return nil
 	}
 
-	return false, fmt.Errorf("data is not equal, %d unequal property", unequalCount)
+	var unsyncedNocoDBNotionPageIds []string
+
+	for _, data := range zippedData {
+		dataAKeys := util.Keys(data.A)
+		dataBKeys := util.Keys(data.B)
+
+		keys := util.FindMatchedKeys(dataAKeys, dataBKeys)
+
+		for _, key := range keys {
+			if data.A[key] != data.B[key] {
+				unsyncedNocoDBNotionPageIds = append(unsyncedNocoDBNotionPageIds, fmt.Sprintf("%v", data.A["Notion Page Id"]))
+			}
+		}
+	}
+
+	return unsyncedNocoDBNotionPageIds
 }

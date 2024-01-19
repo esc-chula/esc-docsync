@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 
 	"github.com/esc-chula/esc-docsync/platform/nocodb/model"
-	"github.com/gofiber/fiber/v2"
 )
 
 func (r *NocoDBService) GetRows(tableId string) ([]map[string]interface{}, error) {
@@ -32,7 +31,7 @@ func (r *NocoDBService) GetRow() {
 func (r *NocoDBService) CreateRow() {
 }
 
-func (r *NocoDBService) UpdateRow(tableId string, data fiber.Map) error {
+func (r *NocoDBService) UpdateRows(tableId string, data interface{}) error {
 	client := NocoDBHTTPClient()
 
 	body, err := json.Marshal(data)

@@ -89,7 +89,7 @@ func InsertHandler(c *fiber.Ctx) error {
 			})
 		}
 
-		if err := nocodbService.UpdateRow(tableId, fiber.Map{
+		if err := nocodbService.UpdateRows(tableId, fiber.Map{
 			"Id":             rowData["Id"],
 			"Notion Page Id": pageData.Id,
 		}); err != nil {

@@ -8,7 +8,7 @@ import (
 func RegisterJobs() {
 	c := cron.New()
 
-	c.AddFunc("@every 5s", job.SyncNotionToNocoDB)
+	c.AddFunc("@every 30s", job.SyncNotionToNocoDB)
 
 	c.Start()
 }
