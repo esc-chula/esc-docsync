@@ -11,8 +11,6 @@ func SyncNotionToNocoDB() {
 	dataMap := config.GetDataMap()
 
 	for _, data := range dataMap {
-		log.Info("Syncing data for table: " + data.TableName)
-
 		notionData, err := lib.FetchNotionDatabaseData(data.TableName)
 		if err != nil {
 			log.Error(err)
@@ -33,7 +31,6 @@ func SyncNotionToNocoDB() {
 		}
 
 		if isDataValid := lib.ValidateDataChanges(nocodbData, notionData); isDataValid {
-			log.Info("Data is valid")
 			continue
 		}
 
