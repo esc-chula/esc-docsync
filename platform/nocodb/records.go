@@ -3,19 +3,27 @@ package nocodb
 import (
 	"encoding/json"
 
+	"github.com/esc-chula/esc-docsync/platform/nocodb/model"
 	"github.com/gofiber/fiber/v2"
 )
 
-func (r *NocoDBService) GetRows(tableId string) error {
+func (r *NocoDBService) GetRows(tableId string) ([]map[string]interface{}, error) {
 	client := NocoDBHTTPClient()
 
 	resp, err := client.Get("/tables/" + tableId + "/records")
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer resp.Body.Close()
 
-	return nil
+	var res model.ResRowsBody
+	if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
+		return nil, err
+	}
+
+	rows := res.List
+
+	return rows, nil
 }
 
 func (r *NocoDBService) GetRow() {

@@ -6,16 +6,16 @@ import (
 	"github.com/esc-chula/esc-docsync/platform/notion"
 )
 
-func FetchNotionDatabase(tableName string) ([]map[string]interface{}, error) {
+func FetchNotionDatabaseData(tableName string) ([]map[string]interface{}, error) {
 	log := logger.GetLogger()
-
-	notionService := notion.NewNotionService()
 
 	schema := config.GetDataSchema(tableName)
 
+	notionService := notion.NewNotionService()
+
 	databaseId := config.GetNotionDatabaseId(tableName)
 
-	dbData, err := notionService.QueryDatabase(databaseId)
+	database, err := notionService.QueryDatabase(databaseId)
 	if err != nil {
 		log.Error("Failed to query database " + databaseId)
 		return nil, err
@@ -23,7 +23,7 @@ func FetchNotionDatabase(tableName string) ([]map[string]interface{}, error) {
 
 	mappedResults := make([]map[string]interface{}, 0)
 
-	for _, result := range dbData.Results {
+	for _, result := range database.Results {
 		properties := result.Properties
 
 		propertiesMap := properties.(map[string]interface{})
